@@ -125,49 +125,32 @@ export const addDoctor = async (req, res) => {
 };
 
 // check this functionality
-// yaha per adminLogin functionality likhre
+
+// yaha per admin login functionality likhre
 export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    // yaha per check karey "email" and "password" match hora kya
+
     if (
       email === process.env.ADMIN_EMAIL &&
       password === process.env.ADMIN_PASSWORD
     ) {
-      // yaha per token k naam se variable declare karey
-      // yaha per "email" aur "password" ko add kar k encrypt karey
-      const token = jwt.sign(
-        (email + password).toString(),
-        process.env.JWT_SECRET
-      );
+      // yaha per "atoken" variable declare karey
+      const atoken = jwt.sign(email + password, process.env.JWT_SECRET);
 
-      res
-        .status(200)
-        .json({ success: true, message: "Admin logged in", token });
+      return res.status(200).json({
+        success: true,
+        message: "Admin login successfully",
+        token: atoken,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Admin login failed",
+      });
     }
-
-    res
-      .status(400)
-      .json({ success: false, message: "Invalid admin email or password" });
-
-    //  yaha "email" unique hai isliye findOne({email}) use kary
-    // const doctor = await doctorModel.findOne({ email });
-
-    // if (!doctor) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Invalid email or password" });
-    // }
-
-    // yaha per "password" compare karey
-    // const isPasswordMatch = await bcrypt.compare(password, doctor.password);
-    // if (!isPasswordMatch) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Invalid password" });
-    // }
   } catch (error) {
-    console.log("error", error.message);
+    console.log("error in admin login functionality", error);
     res.status(400).json({
       success: false,
       message: "check admin login functionality",

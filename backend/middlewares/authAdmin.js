@@ -1,35 +1,30 @@
 import jwt from "jsonwebtoken";
 
-// check this functionality
-// yaha per admin ko check karey
 export const authAdmin = async (req, res, next) => {
   try {
-    // yaha per atoken k naam se variable declare karey
     const atoken = req.headers;
-    // agar "token" nai hai
     if (!atoken) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
-        message: "token not found",
+        message: "token not found check auth admin middleware",
       });
     }
-    // agar "token" hai toh verify karey
-    const jwt_decode = jwt.verify(atoken, process.env.JWT_SECRET);
-    //agar "verfied token" not same as "admin email and password generated token" hai toh
-    if (jwt_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-      res.status(400).json({
-        success: false,
-        message: "token not verified and not same as generated token",
+    // yaha per "token_decode" k naam se varibale declare karey
+    // yaha per decoding the token
+    const token_decode = jwt.verify(atoken, process.env.JWT_SECRET);
+    //  admin "email" aur "password" mien joh token genrate hua hain hai usko token_decode se check karey
+    if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
+      res.status(200).json({
+        success: true,
+        message: "token invalid not generated",
       });
     }
-
     next();
   } catch (error) {
-    console.log("error in authAdmin", error.message);
-    res.status(400).json({
+    console.log("error", error.message);
+    res.status(500).json({
       success: false,
-      message: "check authAdmin functionality",
-      error: error.message,
+      message: "check auth admin middleware functionality",
     });
   }
 };
