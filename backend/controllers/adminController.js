@@ -112,7 +112,7 @@ export const addDoctor = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Doctor added successfully",
-      doctor,
+      doctor: newDoctor,
     });
   } catch (error) {
     console.log("error", error.message);
@@ -137,7 +137,7 @@ export const adminLogin = async (req, res) => {
     ) {
       // yaha per "atoken" variable declare karey
       const atoken = jwt.sign(email + password, process.env.JWT_SECRET);
-
+      console.log("atoken from amdin control", atoken);
       return res.status(200).json({
         success: true,
         message: "Admin login successfully",
@@ -158,3 +158,26 @@ export const adminLogin = async (req, res) => {
     });
   }
 };
+
+// yaha api for getting all doctors list ki functionality likhre
+export const getAllDoctors = async (req, res) => {
+  // 
+  try {
+    // yaha per ".select('-password')" use karey to hide password
+    const doctors = await doctorModel.find({}).select("-password");
+    res.status(200).json({
+      success: true,
+      message: "Doctors fetched successfully",
+      doctors,
+    });
+    
+  } catch (error) {
+    console.log('error', error.message);
+    res.status(400).json({
+      success: false,
+      message: "check get all doctors functionality",
+      error: error.message,
+    });
+  }
+}
+

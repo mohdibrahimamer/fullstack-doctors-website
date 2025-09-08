@@ -1,9 +1,7 @@
-// functionality working
 import express from "express";
-import { getAllDoctors } from "../controllers/doctorController.js";
-
+import { doctorsList } from "../controllers/doctorController.js";
 const doctorRouter = express.Router();
-
-doctorRouter.get("/all-doctors", getAllDoctors);
+// yeh  route bina token ki rahete
+doctorRouter.get("/doctors-list", doctorsList);
 
 export default doctorRouter;

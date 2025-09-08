@@ -1,24 +1,33 @@
 import jwt from "jsonwebtoken";
+// yeh functionality working
 
+// yaha per chat gpt se functionality likhre
 export const authAdmin = async (req, res, next) => {
   try {
-    const atoken = req.headers;
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      return res.status(400).json({
+        success: false,
+        message: "autth header not found",
+      });
+    }
+
+    const atoken = authHeader.split(" ")[1];
     if (!atoken) {
       return res.status(400).json({
         success: false,
-        message: "token not found check auth admin middleware",
+        message: "atoken not found",
       });
     }
-    // yaha per "token_decode" k naam se varibale declare karey
-    // yaha per decoding the token
-    const token_decode = jwt.verify(atoken, process.env.JWT_SECRET);
-    //  admin "email" aur "password" mien joh token genrate hua hain hai usko token_decode se check karey
-    if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-      res.status(200).json({
-        success: true,
-        message: "token invalid not generated",
+
+    const decodedToken = jwt.verify(atoken, process.env.JWT_SECRET);
+    if (!decodedToken) {
+      return res.status(400).json({
+        success: false,
+        message: "atoken is not valid",
       });
     }
+    req.admin = decodedToken.admin;
     next();
   } catch (error) {
     console.log("error", error.message);
