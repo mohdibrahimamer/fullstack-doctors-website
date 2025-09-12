@@ -15,8 +15,8 @@ dotenv.config();
 
 connectDB();
 connectCloudinary();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // yaha per endpoints use karey
 app.use("/api/admin", adminRouter);

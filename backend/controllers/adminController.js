@@ -124,8 +124,6 @@ export const addDoctor = async (req, res) => {
   }
 };
 
-// check this functionality
-
 // yaha per admin login functionality likhre
 export const adminLogin = async (req, res) => {
   try {
@@ -161,7 +159,7 @@ export const adminLogin = async (req, res) => {
 
 // yaha api for getting all doctors list ki functionality likhre
 export const getAllDoctors = async (req, res) => {
-  // 
+  //
   try {
     // yaha per ".select('-password')" use karey to hide password
     const doctors = await doctorModel.find({}).select("-password");
@@ -170,14 +168,12 @@ export const getAllDoctors = async (req, res) => {
       message: "Doctors fetched successfully",
       doctors,
     });
-    
   } catch (error) {
-    console.log('error', error.message);
+    console.log("error", error.message);
     res.status(400).json({
       success: false,
       message: "check get all doctors functionality",
       error: error.message,
     });
   }
-}
-
+};
