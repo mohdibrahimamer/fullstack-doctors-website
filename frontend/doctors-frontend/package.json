@@ -1,5 +1,5 @@
 {
-  "name": "admin-panel",
+  "name": "doctors-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,6 +16,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.1",
     "tailwindcss": "^4.1.13"
   },
