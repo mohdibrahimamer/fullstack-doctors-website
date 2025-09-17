@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import doctorModel from "../models/doctorModel.js";
-
+import appointmentModel from "../models/appointmentModel.js";
+import userModel from "../models/userModel.js";
 // yaha per "addDoctor" function likhrey
 export const addDoctor = async (req, res) => {
   try {
@@ -173,6 +174,106 @@ export const getAllDoctors = async (req, res) => {
     res.status(400).json({
       success: false,
       message: "check get all doctors functionality",
+      error: error.message,
+    });
+  }
+};
+
+// api for getting all the appointment list
+export const appointmentsAdmin = async (req, res) => {
+  try {
+    const appointments = await appointmentModel.find({});
+    res.status(200).json({
+      success: true,
+      message: "Appointments fetched successfully",
+      appointments,
+    });
+  } catch (error) {
+    console.log("error", error.message);
+    res.status(400).json({
+      success: false,
+      message: "check appointment list functionality",
+      error: error.message,
+    });
+  }
+};
+
+// writing an api for admin appointment cancellation
+
+export const adminCancelAppointment = async (req, res) => {
+  try {
+    const { appointmentId } = req.body;
+    // yaha per appointmentdata ko find karte
+    const appointmentData = await appointmentModel.findById(appointmentId);
+
+    // yaha per "cancell appointment" ko "true" kare joh appointment database mien hai
+    await appointmentModel.findByIdAndUpdate(appointmentId, {
+      cancelled: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Appointment cancelled successfully",
+    });
+
+    // yaha per realsing and removing  the doctor slot
+    const { docId, slotDate, slotTime } = appointmentData;
+    // finding the doctor by id
+    const doctorData = await doctorModel.findById(docId);
+    // extracting the slots booked data
+    let slot_booked = doctorData.slots_booked;
+
+    if (slot_booked[slotDate]) {
+      // removing the cancelled slot
+      slot_booked[slotDate] = slot_booked[slotDate].filter(
+        (time) => time !== slotTime
+      );
+
+      // updating the slots_booked data
+      await doctorModel.findByIdAndUpdate(docId, { slots_booked: slot_booked });
+
+      res.status(200).json({
+        success: true,
+        message: "removed the slot from the doctor model also successfully",
+      });
+    }
+  } catch (error) {
+    console.log("error", error.message);
+    res.status(500).json({
+      success: false,
+      message: `Check cancel appointment functionality: ${error.message}`,
+      error: error.message,
+    });
+  }
+};
+
+// writing an api to get all the data to the admin dashboard
+
+export const adminDashboard = async (req, res) => {
+  try {
+    // meri nazar doctors data aur users  data fetch karey
+    const doctors = await doctorModel.find({}).select("-password");
+    const users = await userModel.find({}).select("-password");
+    const appointments = await appointmentModel.find({});
+    // yaha per dashboardData ka object banayey
+    const dashboardData = {
+      // sending the length of the doctors, users, appointments
+      doctors: doctors.length,
+      appointments: appointments.length,
+      patients: users.length,
+      // yaha per latest appointnment show karey in order of 5
+      latestAppointments: appointments.reverse().slice(0, 5),
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "Dashboard data fetched successfully",
+      dashboardData,
+    });
+  } catch (error) {
+    console.log("error", error.message);
+    res.status(500).json({
+      success: false,
+      message: `Check admin dashboard functionality: ${error.message}`,
       error: error.message,
     });
   }

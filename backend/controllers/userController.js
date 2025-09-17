@@ -6,6 +6,9 @@ import upload from "../middlewares/multer.js";
 import { v2 as cloudinary } from "cloudinary";
 import appointmentModel from "../models/appointmentModel.js";
 import doctorModel from "../models/doctorModel.js";
+// yaha per "razor pay" ka package use karey
+import razorpay from "razorpay";
+
 // api to register user
 export const registerUser = async (req, res) => {
   try {
@@ -294,56 +297,151 @@ export const listAppointments = async (req, res) => {
   }
 };
 
-// yaha per  "cancel appointment" ki api likhre
-// yeh api not working please check
-// yeh api not working please check
-// yeh api not working please check
-// yeh api not working please check
-// yeh api not working please check
-// yeh api not working please check
+// api endpoint for canelling an appointment
 export const cancelAppointment = async (req, res) => {
   try {
     const userId = req.user.id;
     const { appointmentId } = req.body;
-    console.log("appointmentId", appointmentId);
-    // yaha per "appointment data" k naam se variable banare
+    // yaha per appointmentdata ko find karte
     const appointmentData = await appointmentModel.findById(appointmentId);
-    console.log("found appointment", appointmentData);
-    //  yaha per verifying the appointment user
-    if (!appointmentData.userId !== userId) {
+
+    // yaha per appointment verify karey
+    if (appointmentData.userId !== userId) {
       return res.status(400).json({
         success: false,
-        message: "Appointment not found",
+        message: "unauthorized action not allowed to cancel the appointment",
       });
     }
-
+    // yaha per "cancell appointment" ko "true" kare joh appointment database mien hai
     await appointmentModel.findByIdAndUpdate(appointmentId, {
       cancelled: true,
-    });
-
-    // yaha per  "doctor slot" ka appointment remove hora
-    const { docId, slotDate, slotTime } = appointmentData;
-    const doctorData = await doctorModel.findById(docId);
-    // extracting the slots
-    let slots_booked = doctorData.slots_booked;
-    // removing the slot
-    slots_booked[slotDate] = slots_booked[slotDate].filter(
-      (time) => time !== slotTime
-    );
-
-    // saving the "new_slots" data in "docdata"
-    await doctorModel.findByIdAndUpdate(docId, {
-      slots_booked,
     });
     res.status(200).json({
       success: true,
       message: "Appointment cancelled successfully",
     });
+
+    // yaha per realsing and removing  the doctor slot
+    const { docId, slotDate, slotTime } = appointmentData;
+    // finding the doctor by id
+    const doctorData = await doctorModel.findById(docId);
+    // extracting the slots booked data
+    let slot_booked = doctorData.slots_booked;
+
+    if (slot_booked[slotDate]) {
+      // removing the cancelled slot
+      slot_booked[slotDate] = slot_booked[slotDate].filter(
+        (time) => time !== slotTime
+      );
+
+      // updating the slots_booked data
+      await doctorModel.findByIdAndUpdate(docId, { slots_booked: slot_booked });
+
+      res.status(200).json({
+        success: true,
+        message: "removed the slot from the doctor model also successfully",
+      });
+    }
   } catch (error) {
     console.log("error", error.message);
     res.status(500).json({
       success: false,
       message: `Check cancel appointment functionality: ${error.message}`,
+      error: error.message,
+    });
+  }
+};
+
+// yaha per kyc details hona padta isliye payment functionality mat likho
+// creating razorpay payment instance
+// yaha per razor ki key id and key secret likho
+// yaha per razor ki key id and key secret likho
+// yaha per razor ki key id and key secret likho
+const razorPayInstance = new razorpay({
+  key_id: "123456",
+  key_secret: "123456",
+});
+// yaha per writing an api for payment gateway
+// aur yeh paymentAppointment ki functionality ko check karo
+// aur yeh paymentAppointment ki functionality ko check karo
+// aur yeh paymentAppointment ki functionality ko check karo
+// aur yeh paymentAppointment ki functionality ko check karo
+export const paymentAppointment = async (req, res) => {
+  try {
+    // yaha per payment ki logic likhre "appointment" ki payment k liye
+    const { appointmentId } = req.body;
+    const appointmentData = await appointmentModel.findById(appointmentId);
+    // agar "appointmentdata" nai hai
+    // aur "appointment cancelled" true hai toh
+    if (!appointmentData || appointmentData.cancelled === true) {
+      return res.status(400).json({
+        success: false,
+        message: "Appointment is already cancelled and can't be paid",
+      });
+    }
+    // yaha creating an options for razorpay payment
+    // yaha per ek options k naam se object banrey
+    const options = {
+      // *100 removing 2 decimal places
+      amount: appointmentData.amount * 100,
+      currency: process.env.CURRENCY,
+      receipt: appointmentId,
+    };
+
+    // creating an order for payment
+    const order = await razorPayInstance.orders.create(options);
+    res.status(200).json({
+      success: true,
+      message: "Order created successfully",
+      order,
+    });
+  } catch (error) {
+    console.log("error", error.message);
+    res.status(500).json({
+      success: false,
+      message: `Check payment appointment functionality: ${error.message}`,
+      error: error.message,
+    });
+  }
+};
+
+// yaha functionality check karo acha se
+// yaha functionality check karo acha se
+// yaha functionality check karo acha se
+// yaha functionality check karo acha se
+// yaha functionality check karo acha se
+// writing an to verify the payment
+export const verifyRazorPayment = async (req, res) => {
+  try {
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+      req.body;
+    // yaha per order info bol k ek varaiable banrey
+    // yaha per razorpay_order_id ko fetch kare
+    const orderInfo = await razorPayInstance.orders.fetch(razorpay_order_id);
+
+    // yaha per orderinfo k object mein status naam ka variable raheta
+    if (orderInfo.status === "paid") {
+      const appointmentId = orderInfo.receipt;
+      // yaha per payment ki logic likhre
+      await appointmentModel.findByIdAndUpdate(appointmentId, {
+        payment: true,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Payment verified successfully",
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Payment verification failed",
+      });
+    }
+  } catch (error) {
+    console.log("error", error.message);
+    res.status(500).json({
+      success: false,
+      message: `Check verify payment functionality: ${error.message}`,
       error: error.message,
     });
   }

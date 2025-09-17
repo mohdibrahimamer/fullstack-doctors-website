@@ -7,6 +7,8 @@ import {
   bookAppointment,
   listAppointments,
   cancelAppointment,
+  paymentAppointment,
+  verifyRazorPayment,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middlewares/authUser.js";
 import upload from "../middlewares/multer.js";
@@ -28,5 +30,10 @@ userRouter.post(
 
 userRouter.post("/book-appointment", verifyToken, bookAppointment);
 userRouter.get("/my-appointment", verifyToken, listAppointments);
+// yaha per functionaltiy not working
 userRouter.post("/cancel-appointment", verifyToken, cancelAppointment);
+// yeh api baad mien check karo
+userRouter.post("/payment-appointment", verifyToken, paymentAppointment);
+
+userRouter.post("/verify-payment", verifyToken, verifyRazorPayment);
 export default userRouter;
