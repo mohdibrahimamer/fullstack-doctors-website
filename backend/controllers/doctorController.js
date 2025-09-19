@@ -14,6 +14,7 @@ import { v2 as cloudinary } from "cloudinary";
 // yeh "changeAvailability" ka functionality work nai kari
 export const changeAvailability = async (req, res) => {
   try {
+    // yaha per req.doctor.id use karey
     const { doctorId } = req.body;
     console.log(req.body);
 
@@ -265,7 +266,7 @@ export const doctorProfile = async (req, res) => {
 // api for updating the doctors profile
 export const doctorProfileUpdate = async (req, res) => {
   try {
-    // agar kisi bhi function mein "const doctorId = req.user.id" use karey toh hamesha individual user ko access asia hi declare karna
+    // agar kisi bhi function mein "const doctorId = req.doctor.id" use karey toh hamesha individual user ko access asia hi declare karna
 
     // const doctorId = req.doctor.id;
     // kyun already "doctorId" avaliable hai body mien
