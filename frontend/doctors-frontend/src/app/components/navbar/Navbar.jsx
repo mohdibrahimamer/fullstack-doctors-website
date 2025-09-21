@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Logo from "../../assets/assets_frontend/logo.svg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { assets } from "../../assets/assets_frontend/assets.js";
+import { set } from "react-hook-form";
 const Navbar = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
@@ -46,9 +47,34 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-4">
           {token ? (
-            <div className="">
-              <img src={assets.profile_pic} alt="profile" />
-              <img src={assets.dropdown_icon} alt="drop-down" />
+            <div className="flex items-center cursor-pointer gap-2 group relative">
+              <img
+                className="w-8 rounded-full"
+                src={assets.profile_pic}
+                alt="profile"
+              />
+              <img
+                className="w-2.5 "
+                src={assets.dropdown_icon}
+                alt="drop-down"
+              />
+
+              <div className="absolute top-0 right-[-70px] pt-14 text-base text-gray-600   hidden group-hover:block">
+                <div className="w-48 bg-stone-100 flex flex-col p-4 rounded-2xl gap-4">
+                  <p className="hover:text-black cursor-pointer">
+                    <Link to="/my-profile">my profile</Link>
+                  </p>
+                  <p className="hover:text-black cursor-pointer">
+                    <Link to="/my-appointments">my appointments</Link>
+                  </p>
+                  <p
+                    onClick={() => setToken(false)}
+                    className="hover:text-black cursor-pointer"
+                  >
+                    <Link to="/logout">logout</Link>
+                  </p>
+                </div>
+              </div>
             </div>
           ) : (
             <button>

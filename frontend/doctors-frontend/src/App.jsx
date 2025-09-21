@@ -22,7 +22,7 @@ function App() {
         {/* yaha per pages ki route banarey */}
         <Route path="/" element={<Home />} />
         <Route path="/doctors" element={<AllDoctors />} />
-        <Route path="/doctors/:id" element={<AllDoctors />} />
+        <Route path="/doctors/:speciality" element={<AllDoctors />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
