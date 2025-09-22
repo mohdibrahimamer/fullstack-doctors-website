@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { assets } from "../../assets/assets_frontend/assets";
 const MyProfile = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,6 +11,11 @@ const MyProfile = () => {
   const [dob, setDob] = useState("");
 
   const [details, setDetails] = useState([]);
+
+  // state for edit info
+  const [editInfo, setEditInfo] = useState(false);
+  // state for save info
+  const [saveInfo, setSaveInfo] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -124,6 +130,88 @@ const MyProfile = () => {
           </Link>
         </p>
       </form>
+
+      <h1 className="text-2xl font-semibold mb-6 text-center mt-6">
+        display information of the profile
+      </h1>
+
+      {/* display information section of profile page */}
+      <div className="w-full max-w-5xl mx-auto px-4 py-10">
+        {/* Top Section */}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+          {/* Profile Images */}
+          <div className="flex gap-4">
+            <img
+              src={assets.profile_pic}
+              alt="Doctor"
+              className="w-32 h-32 rounded-lg object-cover"
+            />
+            <img
+              src={assets.uploadImage}
+              alt="Placeholder"
+              className="w-32 h-32 rounded-lg object-cover"
+            />
+          </div>
+
+          {/* Profile Info */}
+          <div className="flex-1">
+            <h2 className="text-2xl font-semibold mb-6">Edward Vincent</h2>
+
+            {/* Contact Info */}
+            <div className="mb-6">
+              <h3 className="uppercase text-sm font-semibold text-gray-600 border-b pb-2">
+                Contact Information
+              </h3>
+              <ul className="mt-4 space-y-2 text-gray-700">
+                <li>
+                  <span className="font-medium">Email id:</span>{" "}
+                  <a
+                    href="mailto:richardjameswap@gmail.com"
+                    className="text-blue-600"
+                  >
+                    richardjameswap@gmail.com
+                  </a>
+                </li>
+                <li>
+                  <span className="font-medium">Phone:</span>{" "}
+                  <a href="tel:+11234567890" className="text-blue-600">
+                    +1 123 456 7890
+                  </a>
+                </li>
+                <li>
+                  <span className="font-medium">Address:</span> 57th Cross,
+                  Richmond Circle, Church Road, London
+                </li>
+              </ul>
+            </div>
+
+            {/* Basic Info */}
+            <div className="mb-6">
+              <h3 className="uppercase text-sm font-semibold text-gray-600 border-b pb-2">
+                Basic Information
+              </h3>
+              <ul className="mt-4 space-y-2 text-gray-700">
+                <li>
+                  <span className="font-medium">Gender:</span> Male
+                </li>
+                <li>
+                  <span className="font-medium">Birthday:</span> 20 July, 2024
+                </li>
+              </ul>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4 mt-6">
+              <button className="px-5 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition">
+                Edit
+              </button>
+              <button className="px-5 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition">
+                Save Information
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

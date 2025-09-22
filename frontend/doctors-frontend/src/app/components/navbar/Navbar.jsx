@@ -10,9 +10,9 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between px-6 py-3 md:py-4 shadow max-w-5xl rounded-full mx-auto w-full bg-white">
+      <header className="flex items-center justify-between px-6 py-3 md:py-4  max-w-5xl rounded-full mx-auto w-full bg-white">
         <Link to="/">
-          <img src={Logo} />
+          <img src={Logo} className="w-28 " alt="logo" />
         </Link>
         <nav
           id="menu"
