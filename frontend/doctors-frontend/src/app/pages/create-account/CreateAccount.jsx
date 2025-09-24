@@ -31,13 +31,13 @@ const CreateAccount = () => {
       <div>Create Account page</div>
       <form
         onSubmit={handleSubmit}
-        className="bg-white text-gray-500 max-w-[340px] w-full mx-4 md:p-6 p-4 py-8 text-left text-sm rounded-lg shadow-[0px_0px_10px_0px] shadow-black/10"
+        className=" relative left-90 bg-white text-gray-500 max-w-[340px] w-full mx-4 md:p-6 p-4 py-8 text-left text-sm rounded-lg shadow-[0px_0px_10px_0px] shadow-black/10"
       >
         <h2 className="text-2xl font-bold mb-9 text-center text-gray-800">
           Create Account
         </h2>
         <p>please sign up to book the appointment</p>
-        <div className="flex items-center my-2 border bg-indigo-500/5 border-gray-500/10 rounded gap-1 pl-2">
+        <div className="flex items-center my-5 border bg-indigo-500/5 border-gray-500/10 rounded gap-1 pl-2">
           <label htmlFor="fullName"></label>
           <input
             className="w-full outline-none bg-transparent py-2.5"
@@ -47,7 +47,7 @@ const CreateAccount = () => {
             placeholder="enter your full name"
           />
         </div>
-        <div className="flex items-center my-2 border bg-indigo-500/5 border-gray-500/10 rounded gap-1 pl-2">
+        <div className="flex items-center my-5 border bg-indigo-500/5 border-gray-500/10 rounded gap-1 pl-2">
           <label htmlFor="email"></label>
           <input
             className="w-full outline-none bg-transparent py-2.5"

@@ -1,15 +1,6 @@
-import React, { useState } from "react";
-import { set } from "react-hook-form";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-const days = [
-  "Mon 10",
-  "Tue 11",
-  "Wed 12",
-  "Thu 13",
-  "Fri 14",
-  "Sat 15",
-  "Sun 16",
-];
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const times = [
   "8:00 am",
   "8:30 am",
@@ -37,6 +28,12 @@ const BookingSlots = () => {
   // yaha per iski functionality samjho
   // yaha per iski functionality samjho
   // yaha per iski functionality samjho
+
+  // yeh chatgpt ka code hai
+  // yeh chatgpt ka code hai
+  // yeh chatgpt ka code hai
+  // yeh chatgpt ka code hai
+
   const getAvaliableSlots = async () => {
     setDocSlots([]);
     // getting current date
@@ -48,7 +45,7 @@ const BookingSlots = () => {
       currentDate.setDate(today.getDate() + i);
       // yaha per setting end time of the date with index
       let endTime = new Date();
-      endTime.setDate(today.getDate() + 1);
+      endTime.setDate(today.getDate() + i);
       // setting the hours 3  zeros for minute and seconds and milliseconds
       // here  time  is set for 9 pm
       endTime.setHours(21, 0, 0, 0);
@@ -67,7 +64,7 @@ const BookingSlots = () => {
         currentDate.setMinutes(0);
       }
 
-      // yaha per "timeSlots" naam se varibale banare
+      // yaha per "timeSlots" naam se array banare
 
       let timeSlots = [];
 
@@ -89,42 +86,56 @@ const BookingSlots = () => {
       setDocSlots((prevSlots) => [...prevSlots, timeSlots]);
     }
   };
+
+  useEffect(() => {
+    getAvaliableSlots();
+  }, []);
   return (
-    <section className="max-w-5xl mr-4 mx-auto mt-6 p-6 bg-white ">
+    <section className="max-w-5xl mr-4 mx-auto mt-6  bg-white ">
       <h3 className="font-semibold pb-4 text-xl">Booking slots</h3>
 
-      {/* Days */}
-      <div className="flex  flex-wrap gap-2">
-        {days.map((day) => (
-          <button
-            key={day}
-            onClick={() => setSelectedDay(day)}
-            className={`px-4 py-2 rounded-lg ${
-              selectedDay === day
-                ? "bg-[#5F6FFF] text-white"
-                : "bg-gray-100 text-gray-700 cursor-pointer"
-            }`}
-          >
-            {day}
-          </button>
-        ))}
+      {/* Times */}
+      <div className="flex  gap-3 items-center overflow-x-scroll  w-full">
+        {docSlots.map((item, index) => {
+          //  const {}==
+          return (
+            <div
+              key={index}
+              onClick={() => setSlotIndex(index)}
+              className={`text-center cursor-pointer ml-2 px-4 py-3 rounded-full  ${
+                slotIndex === index
+                  ? "bg-indigo-600 text-white"
+                  : "bg-blue-200 text-black"
+              }`}
+            >
+              <button className="cursor-pointer ml-2" type="button">
+                {item[0] && daysOfWeek[item[0].datetime.getDay()]}
+              </button>
+              {/* displaying date if item[0] is available */}
+              <button className="cursor-pointer ml-2">
+                {item[0] && item[0].datetime.getDate()}
+              </button>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Times */}
-      <div className="flex flex-wrap gap-2 mt-4">
-        {times.map((time) => (
-          <button
-            key={time}
-            onClick={() => setSelectedTime(time)}
-            className={`px-4 py-2 rounded-full border ${
-              selectedTime === time
-                ? "bg-[#5F6FFF] text-white border-[#5F6FFF]"
-                : "border-gray-300 text-gray-700 cursor-pointer"
-            }`}
-          >
-            {time}
-          </button>
-        ))}
+      <div className="flex items-center overflow-x-scroll gap-3 mt-4">
+        {docSlots.length > 0 &&
+          docSlots[slotIndex].map((item, index) => (
+            <div key={index} onClick={() => setSlotTime(item.time)}>
+              <button
+                className={` flex flex-shrink  gap-3 items-center cursor-pointer  px-4 py-3 rounded-xl  ${
+                  SlotTime === item.time
+                    ? "bg-indigo-600 text-white"
+                    : "bg-blue-200 text-black"
+                }`}
+                type="button"
+              >
+                {item.time}
+              </button>
+            </div>
+          ))}
       </div>
 
       <button

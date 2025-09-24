@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import BookingSlots from "../../components/booking-slots/BookingSlots";
 
 import { MdOutlineVerified } from "react-icons/md";
+import RelatedDoctors from "../../components/related-doctors/RelatedDoctors";
 const Appoinment = () => {
   const [doctor, setDoctor] = useState(null);
   const navigate = useNavigate();
@@ -17,7 +18,6 @@ const Appoinment = () => {
     const foundInfo = doctors.find(
       (doc) => String(doc._id ?? doc.id) === String(idFromUrl)
     );
-    console.log("foundInfo", foundInfo);
     setDoctor(foundInfo || null);
   };
 
@@ -69,6 +69,7 @@ const Appoinment = () => {
         <p>No doctor found for id {id}</p>
       )}
       <BookingSlots />
+      {doctor && <RelatedDoctors id={id} speciality={doctor.speciality} />}
     </>
   );
 };

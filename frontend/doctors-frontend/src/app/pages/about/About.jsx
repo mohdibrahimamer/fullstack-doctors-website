@@ -56,9 +56,9 @@ const About = () => {
               WHY <span className="text-blue-600">CHOOSE US</span>
             </h2>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-6 ">
               {/* Card 1 */}
-              <div className="border rounded-lg p-6 text-center shadow-sm bg-white">
+              <div className="border rounded-lg p-6 text-center shadow-sm bg-white ">
                 <h4 className="font-semibold text-lg mb-2">EFFICIENCY</h4>
                 <p className="text-gray-600 text-sm md:text-base">
                   Streamlined Appointment Scheduling That Fits Into Your Busy
@@ -76,7 +76,7 @@ const About = () => {
               </div>
 
               {/* Card 3 */}
-              <div className="border rounded-lg p-6 text-center shadow-sm bg-white">
+              <div className="border rounded-lg p-6 text-center shadow-sm bg-white ">
                 <h4 className="font-semibold text-lg mb-2">PERSONALIZATION</h4>
                 <p className="text-gray-600 text-sm md:text-base">
                   Tailored Recommendations And Reminders To Help You Stay On Top

@@ -80,7 +80,7 @@ const Navbar = () => {
             <button>
               <Link
                 className="hidden md:flex bg-indigo-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-indigo-700 transition"
-                to="/create-account"
+                to="/login"
               >
                 Create account
               </Link>
