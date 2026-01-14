@@ -242,7 +242,7 @@ export const doctorDashboard = async (req, res) => {
 };
 
 // api to get the doctor profile
-export const doctorProfile = async (req, res) => {
+export const doctorProfile  = async (req, res) => {
   try {
     const { doctorId } = req.doctor.id;
     const doctorsData = await doctorModel
